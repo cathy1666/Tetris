@@ -17,10 +17,10 @@ public class SquareClass extends JComponent
 	//mArray is the background of playing space
 	//1,2 is present square
 	//3 is stop square(obstacle)
-	private char [][]mArray;
+	private char[][] mArray;
 	//define each direction of seven kind square
 	//each one is a 5*5 block
-	private char square[][][][]=
+	private char[][][][] square=
 	{
 	{//[]
 	{
@@ -422,9 +422,7 @@ public class SquareClass extends JComponent
 	public void removeRow()
 	{
 		int i, j, k, q;
-		char []tmp;
 		boolean remove;
-		tmp = new char [weight];
 		for(i = height-1; i > 0; i--)
 		{
 			remove = true;
@@ -448,14 +446,15 @@ public class SquareClass extends JComponent
 				for(k = i; k > 0; k--)
 				{
 					//從消去的那一列開始，每列都下移一格
-					tmp = mArray[k-1];
-					mArray[k] = tmp;
+					//Java陣列物件是只能儲存基本資料型態或reference的一維陣列，二維以上的陣列是透過reference指到其他的一維陣列物件來達成
+					//所以不能偷懶只寫 mArray[k] = mArray[k-1];
+					for(q = 0; q < weight; q++)
+						mArray[k][q] = mArray[k-1][q];
 				}
 				for(k = 0; k < weight; k++)
 				{
 					//新的第一列設為0
-					mArray[0][k] = 8;//##############################
-					//mArray[0][k] = 0;
+					mArray[0][k] = 0;
 				}
 				dispaly();
 			}		
@@ -468,7 +467,8 @@ public class SquareClass extends JComponent
 	}
 	public void dispaly()
 	{
-		System.out.println("");
+		System.out.print("score:");
+		System.out.println(score);
 		for(int i = 0; i < height; i++)
 		{
 			System.out.print(i);
@@ -479,12 +479,6 @@ public class SquareClass extends JComponent
 				{
 					System.out.print("*");
 				}
-				//################################
-				else if(mArray[i][j] == 8)
-				{
-					System.out.print("#");
-				}
-				//################################
 				else if(mArray[i][j] == 1)
 				{
 					System.out.print("A");
