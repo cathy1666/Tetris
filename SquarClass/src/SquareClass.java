@@ -437,10 +437,8 @@ public class SquareClass extends JComponent
 			}
 			if(remove)
 			{
-				System.out.print("line: ");
-				System.out.println(i);
-				System.out.print(remove);
-				System.out.println(" remove");
+				System.out.println("line: " + i);
+				System.out.println(remove + " remove");
 				remove = false;
 				score++;
 				for(k = i; k > 0; k--)
@@ -467,12 +465,10 @@ public class SquareClass extends JComponent
 	}
 	public void dispaly()
 	{
-		System.out.print("score:");
-		System.out.println(score);
+		System.out.print("score:" + score);
 		for(int i = 0; i < height; i++)
 		{
-			System.out.print(i);
-			System.out.print("\t");
+			System.out.print(i + "\t");
 			for(int j = 0; j < weight; j++)
 			{
 				if(mArray[i][j] == 0)
