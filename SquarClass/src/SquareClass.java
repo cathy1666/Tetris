@@ -258,9 +258,14 @@ public class SquareClass extends JComponent
 	{
 		x = 0;
 		y = 0;
+		/*##################################
 		int rn = (int)(Math.random()*100); 
 		dir = rn % 4;
 		Class = rn % 7;
+		*/
+		dir = (int)(Math.random()*100) % 4;
+		Class = (int)(Math.random()*100) % 7;
+		//##################################
 		score = 0;
 		//clear the playing space
 		for(int i = 0; i < height; i++)
@@ -271,10 +276,16 @@ public class SquareClass extends JComponent
 	public void newSquare()
 	{		
 		y = 0;
+		/*##################################
 		int rn = (int)(Math.random()*100); 
-		x = rn%5;
+		x = rn % 5;
 		dir = rn % 4;
 		Class = rn % 7;
+		*/
+		x = (int)(Math.random()*100) % 5;
+		dir = (int)(Math.random()*100) % 4;
+		Class = (int)(Math.random()*100) % 7;
+		//##################################
 		for(int i = 0; i < 5; i++)
 			for(int j = 0; j < 5; j++)
 				if((i+y) >= 0 && (i+y) < height && (j+x) >= 0 && (j+x) < weight)
@@ -304,7 +315,7 @@ public class SquareClass extends JComponent
 	public boolean squareStop()
 	{
 		int i, j, nextdir;
-		nextdir = (dir+1)%4 ;
+		nextdir = (dir + 1) % 4 ;
 		for(i = 0 ; i < 5 ; i++)
 			for(j = 0 ; j < 5 ; j++)
 				if(square[Class][nextdir][i][j] != 0)
@@ -335,7 +346,7 @@ public class SquareClass extends JComponent
 			case 's'://spin
 				if(!(stop = squareStop()))//call squareStop() function to test
 				{ 
-					dir = (dir+1)%4;		
+					dir = (dir + 1) % 4;		
 				}
 				break;
 		}
@@ -410,27 +421,44 @@ public class SquareClass extends JComponent
 	//when stop square fill a row, remove it and get score
 	public void removeRow()
 	{
+		int i, j, k, q;
+		char []tmp;
 		boolean remove;
-		for(int i = height-1; i > 0; i--)
+		tmp = new char [weight];
+		for(i = height-1; i > 0; i--)
 		{
 			remove = true;
-			for(int j = 0; j < weight; j++)
+			for(j = 0; j < weight; j++)
 			{				
 				if(mArray[i][j] != 3)
 				{
+					
 					remove = false;
 					break;					
 				}
 			}
 			if(remove)
 			{
+				System.out.print("line: ");
+				System.out.println(i);
+				System.out.print(remove);
+				System.out.println(" remove");
+				remove = false;
 				score++;
-				for(int j = i; j > 0; j--)//從消去的那一列開始，每列都下移一格
-					mArray[j] = mArray[j-1];
-				for(int j = 0; j < weight; j++)//新的第一列設為0
-					mArray[0][j] = 0;
+				for(k = i; k > 0; k--)
+				{
+					//從消去的那一列開始，每列都下移一格
+					tmp = mArray[k-1];
+					mArray[k] = tmp;
+				}
+				for(k = 0; k < weight; k++)
+				{
+					//新的第一列設為0
+					mArray[0][k] = 8;//##############################
+					//mArray[0][k] = 0;
+				}
 				dispaly();
-			}				
+			}		
 		}
 	}
 	//get present score
@@ -440,14 +468,23 @@ public class SquareClass extends JComponent
 	}
 	public void dispaly()
 	{
+		System.out.println("");
 		for(int i = 0; i < height; i++)
 		{
+			System.out.print(i);
+			System.out.print("\t");
 			for(int j = 0; j < weight; j++)
 			{
 				if(mArray[i][j] == 0)
 				{
 					System.out.print("*");
 				}
+				//################################
+				else if(mArray[i][j] == 8)
+				{
+					System.out.print("#");
+				}
+				//################################
 				else if(mArray[i][j] == 1)
 				{
 					System.out.print("A");
