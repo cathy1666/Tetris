@@ -18,6 +18,7 @@ public class SquareClass extends JComponent
 	//1,2 is present square
 	//3 is stop square(obstacle)
 	private char[][] mArray;
+	private int[][] mArray_color;
 	//define each direction of seven kind square
 	//each one is a 5*5 block
 	private char[][][][] square=
@@ -243,6 +244,7 @@ public class SquareClass extends JComponent
 		Class = 0;	
 		score = 0;		
 		mArray = new char [height][weight];
+		mArray_color = new int [height][weight];
 		//set size of the playing space component(SquareClass)
 		setSize(350,600);
 		//get square icon
@@ -270,7 +272,11 @@ public class SquareClass extends JComponent
 		//clear the playing space
 		for(int i = 0; i < height; i++)
 			for(int j = 0; j < weight; j++)
-				mArray[i][j] = 0;		
+			{
+				mArray[i][j] = 0;	
+				mArray_color[i][j] = 0;
+			}
+					
 	}
 	//create a new square on the top of playing space 
 	public void newSquare()
@@ -416,7 +422,11 @@ public class SquareClass extends JComponent
 			for(j = 0; j < 5; j++)
 				if(square[Class][dir][i][j] > 0)
 					if((i+y) >= 0 && (i+y) < height && (j+x) >= 0 && (j+x) < weight)
+					{
 						mArray[i+y][j+x] = 3;
+						mArray_color[i+y][j+x] = Class;
+					}
+						
 	}
 	//when stop square fill a row, remove it and get score
 	public void removeRow()
@@ -429,8 +439,7 @@ public class SquareClass extends JComponent
 			for(j = 0; j < weight; j++)
 			{				
 				if(mArray[i][j] != 3)
-				{
-					
+				{					
 					remove = false;
 					break;					
 				}
@@ -443,16 +452,16 @@ public class SquareClass extends JComponent
 				score++;
 				for(k = i; k > 0; k--)
 				{
-					//從消去的那一列開始，每列都下移一格
-					//Java陣列物件是只能儲存基本資料型態或reference的一維陣列，二維以上的陣列是透過reference指到其他的一維陣列物件來達成
-					//所以不能偷懶只寫 mArray[k] = mArray[k-1];
 					for(q = 0; q < weight; q++)
+					{
 						mArray[k][q] = mArray[k-1][q];
+						mArray_color[k][q] = mArray_color[k-1][q];
+					}
 				}
 				for(k = 0; k < weight; k++)
 				{
-					//新的第一列設為0
 					mArray[0][k] = 0;
+					mArray_color[0][k] = 0;
 				}
 				dispaly();
 			}		
@@ -483,7 +492,7 @@ public class SquareClass extends JComponent
 				{
 					System.out.print("A");
 				}
-				else if(mArray[i][j] == 3)
+				else if(mArray[i][j] < 0)
 				{
 					System.out.print("X");
 				}				
@@ -502,9 +511,9 @@ public class SquareClass extends JComponent
         // clean previous screen
         g.setColor(Color.white);
         g.fillRect(0, 0,250, 500);
-        if(score>=1)
-        g.drawImage(imBG, 0, 0,250, 500, this);
-        else
+        //if(score>=1)
+        //g.drawImage(imBG, 0, 0,250, 500, this);
+        //else
         g.drawImage(imBG2, 0, 0,250, 500, this);
         // draw stack of pieces
         for(int i = 0; i < 20; i++) {
@@ -516,8 +525,12 @@ public class SquareClass extends JComponent
             	else if(mArray[i+5][j] == 2)
             		drawBlock(g, images[Class], j, i);
             	//when square stop(became obstacle) it will become the same color
-            	else if(mArray[i+5][j]==3)
-            		drawBlock(g, images[7], j, i);
+            	else if(mArray[i+5][j] == 3)
+            	{
+            		int img_n = mArray_color[i+5][j];
+            		drawBlock(g, images[img_n], j, i);
+            	}
+            		
             }
         }
     }
