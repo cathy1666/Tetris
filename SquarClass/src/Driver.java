@@ -105,7 +105,7 @@ public class Driver extends JFrame
 	{
 		public void keyPressed(KeyEvent e) 
 		{
-			if(isRestart || squareClass.IsGameover() || isPause)
+			if(isRestart || isGameover || isPause)
 				return;		                    
 		    switch(e.getKeyCode())
 		    {
@@ -146,6 +146,7 @@ public class Driver extends JFrame
 		public void actionPerformed(ActionEvent e) 
 		{
             isRestart = true;
+            isGameover = false;
             keyin.requestFocus();
             
             // wait for 1 seconds to end the previous game
@@ -157,19 +158,19 @@ public class Driver extends JFrame
             }
             
             gameThread = new Thread(new Runnable() {
-                public void run() {
-                    while(!squareClass.IsGameover() && !isRestart) 
-                    {
+                public void run() {                	
+                    while(!isGameover && !isRestart) 
+                    {                    	
                         if(!isPause) 
                         {
                             try 
-                            {                            	
+                            { 
                             	squareClass.setSquare();//keep moving down
-                            	squareClass.dispaly();	                            	
+                            	//squareClass.dispaly();	                            	
                             	squareClass.removeRow(); 
                             	scoreLabel.setText(squareClass.getScore()+"");
-                            	
-                    			isGameover = squareClass.IsGameover();                                                            
+                            	if(!isGameover)
+                            		isGameover = squareClass.IsGameover();                                                            
                                 Thread.sleep(500);//set delay time
                             }
                             catch(InterruptedException ex) {
@@ -187,7 +188,7 @@ public class Driver extends JFrame
                         if(isGameover)
                         {
                         	JOptionPane.showMessageDialog(null,
-                        			"GAME OVER!!\nYor score is " + squareClass.getScore());
+                        			">>>GAME OVER!!\nYor score is " + squareClass.getScore());
                         }*/
                     }
                 }
